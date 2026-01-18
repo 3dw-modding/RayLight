@@ -45,6 +45,10 @@ namespace RayLight.Windows
                 {
                     if (ImGui.BeginMenu("File"))
                     {
+                        if (ImGui.MenuItem("Save"))
+                        {
+                            SelectedSZS.Save();
+                        }
                         if (ImGui.MenuItem("Reload"))
                         {
                             SelectedSZS.Reload();

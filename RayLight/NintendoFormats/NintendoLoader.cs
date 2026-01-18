@@ -42,8 +42,18 @@ namespace RayLight.NintendoFormats
             {
                 sarc.Add(file.Name, file.Data);
             }
-            
-            
+
+            //Write SARC to memory
+            using MemoryStream ms = new();
+            sarc.Write(ms,endian);
+
+            //Clean up sarc
+            sarc = null;
+
+            //Compress with Yaz0
+            byte[] compressed = Yaz0.Compress(ms.ToArray()).ToArray();
+
+            File.WriteAllBytes(FilePath, compressed);
         }
 
         public void Reload()
