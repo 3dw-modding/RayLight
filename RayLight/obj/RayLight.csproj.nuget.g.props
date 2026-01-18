@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\mjcox\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.12.3</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="C:\Users\mjcox\.nuget\packages\" />
+    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp\0.6.0-alpha\contentFiles\any\netstandard2.0\nfd.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp\0.6.0-alpha\contentFiles\any\netstandard2.0\nfd.dll')">
+      <NuGetPackageId>NativeFileDialogSharp</NuGetPackageId>
+      <NuGetPackageVersion>0.6.0-alpha</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>nfd.dll</Link>
+    </Content>
+    <Content Include="$(NuGetPackageRoot)nativefiledialogsharp\0.6.0-alpha\contentFiles\any\netstandard2.0\nfd_x86.dll" Condition="Exists('$(NuGetPackageRoot)nativefiledialogsharp\0.6.0-alpha\contentFiles\any\netstandard2.0\nfd_x86.dll')">
+      <NuGetPackageId>NativeFileDialogSharp</NuGetPackageId>
+      <NuGetPackageVersion>0.6.0-alpha</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>nfd_x86.dll</Link>
+    </Content>
+  </ItemGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Content Include="$(NuGetPackageRoot)bfreslibrary\1.0.1\contentFiles\any\net5.0\Lib\Syroot.NintenTools.NSW.Bntx.dll" Condition="Exists('$(NuGetPackageRoot)bfreslibrary\1.0.1\contentFiles\any\net5.0\Lib\Syroot.NintenTools.NSW.Bntx.dll')">
+      <NuGetPackageId>BfresLibrary</NuGetPackageId>
+      <NuGetPackageVersion>1.0.1</NuGetPackageVersion>
+      <NuGetItemType>Content</NuGetItemType>
+      <Pack>false</Pack>
+      <Private>False</Private>
+      <Link>Lib\Syroot.NintenTools.NSW.Bntx.dll</Link>
+    </Content>
+  </ItemGroup>
+</Project>
