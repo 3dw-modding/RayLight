@@ -58,6 +58,10 @@
               "target": "Package",
               "version": "[1.0.2, )"
             },
+            "MsbtLib": {
+              "target": "Package",
+              "version": "[0.10.2, )"
+            },
             "NativeFileDialogSharp": {
               "target": "Package",
               "version": "[0.6.0-alpha, )"

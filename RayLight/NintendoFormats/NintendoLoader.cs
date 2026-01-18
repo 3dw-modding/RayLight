@@ -5,6 +5,7 @@ using System.Runtime;
 using CsYaz0;
 using Nintendo.Bfres;
 using SarcLibrary;
+using MsbtLib;
 
 
 namespace RayLight.NintendoFormats
@@ -45,7 +46,7 @@ namespace RayLight.NintendoFormats
 
             //Write SARC to memory
             using MemoryStream ms = new();
-            sarc.Write(ms,endian);
+            sarc.Write(ms, endian);
 
             //Clean up sarc
             sarc = null;
@@ -91,4 +92,49 @@ namespace RayLight.NintendoFormats
         }
 
     }
+
+    internal class MSBTFile
+    {
+        public string FilePath = null;
+        public SZSArchive OriginArchive = null;
+        public string OriginFileName = null;
+        public Msbt msbt;
+
+        public MSBTFile(string path)
+        {
+            FilePath = path;
+            FileStream MsbtBin = File.OpenRead(FilePath);
+            msbt = new(MsbtBin);
+        }
+
+        public MSBTFile(byte[] MsbtData, SZSArchive originArchive, string originFileName)
+        {
+            OriginArchive = originArchive;
+            OriginFileName = originFileName;
+            msbt = new(MsbtData);
+        }
+
+        public void Save()
+        {
+            if (OriginArchive != null && OriginFileName != null)
+            {
+                byte[] msbtData = msbt.Write();
+                for (int i = 0; i < OriginArchive.files.Count; i++)
+                {
+                    if (OriginArchive.files[i].Name == OriginFileName)
+                    {
+                        OriginArchive.files[i].Data = msbtData;
+                        break;
+                    }
+                }
+                OriginArchive.Save();
+            }
+            else if (FilePath != null)
+            {
+                byte[] msbtData = msbt.Write();
+                File.WriteAllBytes(FilePath, msbtData);
+            }
+        }
+    }
+
 }

@@ -28,7 +28,8 @@ while (!Raylib.WindowShouldClose())
     if(windowState.FileWindowOpen)baseUI.RenderFileBrowser(windowState);
     if (windowState.AboutWindowOpen) baseUI.RenderAboutMenu(windowState);
 
-    if (windowState.SZSViewerOpen && windowState.SZSEditorState.loadedSZS.Count() > 0) SZSEditor.RenderEditor(windowState);
+    if (windowState.SZSEditorState.Open && windowState.SZSEditorState.loadedSZS.Count() > 0) SZSEditor.RenderEditor(windowState);
+    if (windowState.MSBTEditorState.Open && windowState.MSBTEditorState.loadedMSBTs.Count() > 0) MsbtEditor.RenderEditor(windowState);
 
     rlImGui.End();
     Raylib.EndDrawing();

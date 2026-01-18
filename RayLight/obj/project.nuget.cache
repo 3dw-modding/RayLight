@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "ucyEZbza6L4=",
+  "dgSpecHash": "irKE8kYJIbg=",
   "success": true,
   "projectFilePath": "F:\\Dev\\Code\\CS\\RayLight\\RayLight\\RayLight.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\mjcox\\.nuget\\packages\\communitytoolkit.highperformance\\8.4.0\\communitytoolkit.highperformance.8.4.0.nupkg.sha512",
     "C:\\Users\\mjcox\\.nuget\\packages\\csyaz0\\1.0.2\\csyaz0.1.0.2.nupkg.sha512",
     "C:\\Users\\mjcox\\.nuget\\packages\\imgui.net\\1.91.6.1\\imgui.net.1.91.6.1.nupkg.sha512",
+    "C:\\Users\\mjcox\\.nuget\\packages\\msbtlib\\0.10.2\\msbtlib.0.10.2.nupkg.sha512",
     "C:\\Users\\mjcox\\.nuget\\packages\\nativefiledialogsharp\\0.6.0-alpha\\nativefiledialogsharp.0.6.0-alpha.nupkg.sha512",
     "C:\\Users\\mjcox\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\mjcox\\.nuget\\packages\\raylib-cs\\7.0.1\\raylib-cs.7.0.1.nupkg.sha512",

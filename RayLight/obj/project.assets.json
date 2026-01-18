@@ -99,6 +99,15 @@
           }
         }
       },
+      "MsbtLib/0.10.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/MsbtLib.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0/MsbtLib.dll": {}
+        }
+      },
       "NativeFileDialogSharp/0.6.0-alpha": {
         "type": "package",
         "compile": {
@@ -424,6 +433,20 @@
         "runtimes/win-x86/native/cimgui.dll"
       ]
     },
+    "MsbtLib/0.10.2": {
+      "sha512": "PLLmK70Ai5vgRzejRiUEfLKwF7JdCLfkToh+xQjbNmpDNuk3LwcJZ4OOChbSE9sGXVM8rg/2pZ8i+2ZrEQsCoQ==",
+      "type": "package",
+      "path": "msbtlib/0.10.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net8.0/MsbtLib.dll",
+        "msbtlib.0.10.2.nupkg.sha512",
+        "msbtlib.nuspec"
+      ]
+    },
     "NativeFileDialogSharp/0.6.0-alpha": {
       "sha512": "2JvfxgAMWEGA9rIuYw+/vcj8eisBJbb4fzviJU47urU72z7m6BW2SykaMRtQorr06Xh3ZxG+gykiqV3D4crfLA==",
       "type": "package",
@@ -717,6 +740,7 @@
     "net9.0": [
       "BfresLibrary >= 1.0.1",
       "CsYaz0 >= 1.0.2",
+      "MsbtLib >= 0.10.2",
       "NativeFileDialogSharp >= 0.6.0-alpha",
       "SarcLibrary >= 3.3.4",
       "rlImgui-cs >= 3.2.0"
@@ -779,6 +803,10 @@
           "CsYaz0": {
             "target": "Package",
             "version": "[1.0.2, )"
+          },
+          "MsbtLib": {
+            "target": "Package",
+            "version": "[0.10.2, )"
           },
           "NativeFileDialogSharp": {
             "target": "Package",

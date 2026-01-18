@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ namespace RayLight
 {
     internal class SupportedFormats
     {
-        static String[] supportedFormats = new String[] { ".szs" };
+        static String[] supportedFormats = new String[] { ".szs", ".msbt" };
 
         public static bool isSupported(String format)
         {
@@ -30,9 +31,33 @@ namespace RayLight
                     }
                     
                     windowState.SZSEditorState.loadedSZS.Add(new SZSArchive(path));
-                    windowState.SZSViewerOpen = true;
+                    windowState.SZSEditorState.Open = true;
+                    break;
+                case (".msbt"):
+
+                    foreach(MSBTFile msbtFile in windowState.MSBTEditorState.loadedMSBTs)
+                    {
+                        if (msbtFile.FilePath == null) continue;
+                        if (msbtFile.FilePath.ToLower() == path.ToLower()) break;
+                    }
+
+
+                    windowState.MSBTEditorState.loadedMSBTs.Add(new MSBTFile(path));
                     break;
 
+
+            }
+        }
+
+        public static void HandleFile(string type, byte[] data, string name, SZSArchive OriginArchive, WindowState windowState)
+        {
+            Console.WriteLine($"loading {name}");
+
+            switch (type.ToLower())
+            {
+                case (".msbt"):
+                    windowState.MSBTEditorState.loadedMSBTs.Add(new MSBTFile(data,OriginArchive,name));
+                    break;
             }
         }
     }

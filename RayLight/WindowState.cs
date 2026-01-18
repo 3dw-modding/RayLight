@@ -13,9 +13,11 @@ namespace RayLight
         //Open states
         public bool AboutWindowOpen = false;
         public bool FileWindowOpen = true;
-        public bool SZSViewerOpen = false;
 
-        //SZS Viewer/Editor
+        //Editors
         public SZSEditorState SZSEditorState = new SZSEditorState();
+        public MsbtEditorState MSBTEditorState = new MsbtEditorState();
+
+
     }
 }

@@ -13,6 +13,8 @@ namespace RayLight.Windows
 {
     internal class SZSEditorState
     {
+        public bool Open = false;
+
         public int SZSViwerTab = 0;
         public List<SZSArchive> loadedSZS = new List<SZSArchive>();
 
@@ -38,7 +40,7 @@ namespace RayLight.Windows
 
             SZSArchive SelectedSZS = EditorState.loadedSZS[EditorState.SZSViwerTab];
 
-            if (ImGui.Begin("SZS Viewer", ref windowState.SZSViewerOpen, ImGuiWindowFlags.MenuBar))
+            if (ImGui.Begin("SZS Viewer", ref windowState.SZSEditorState.Open, ImGuiWindowFlags.MenuBar))
             {
 
                 if (ImGui.BeginMenuBar())
@@ -100,8 +102,9 @@ namespace RayLight.Windows
                     bool FileRemoved = false;
                     LoadedFile file = SelectedSZS.files[fileIndex];
                     string name = file.Name;
+                    string extention = "." + name.Split(".")[^1];
 
-                    bool isSupported = SupportedFormats.isSupported("."+file.Name.Split(".")[^1]);
+                    bool isSupported = SupportedFormats.isSupported(extention);
 
                     if (!isSupported) StyleData.ColourButtonRed();
                     else StyleData.ColourButtonGreen();
@@ -111,6 +114,7 @@ namespace RayLight.Windows
                         if (isSupported)
                         {
                             //SupportedFormats.HandleFile(file, windowState);
+                            SupportedFormats.HandleFile(extention, file.Data, name, SelectedSZS, windowState);
                         }
                     }
                     

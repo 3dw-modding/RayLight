@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RayLight")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("0.0.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.0.1+eca54bf813136f580a0c7b06de080aba570331eb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("0.0.1+27085b635cf991715f5bfb6bc61e44affb81d882")]
 [assembly: System.Reflection.AssemblyProductAttribute("RayLight")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RayLight")]
 [assembly: System.Reflection.AssemblyVersionAttribute("0.0.1.0")]

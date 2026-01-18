@@ -40,9 +40,9 @@ namespace RayLight
                     {
                         windowState.FileWindowOpen = !windowState.FileWindowOpen;
                     }
-                    if (ImGui.MenuItem(windowState.SZSViewerOpen ? "SZS Editor " + IconFonts.FontAwesome6.Check : "SZS Editor "))
+                    if (ImGui.MenuItem(windowState.SZSEditorState.Open ? "SZS Editor " + IconFonts.FontAwesome6.Check : "SZS Editor "))
                     {
-                        windowState.SZSViewerOpen = !windowState.SZSViewerOpen;
+                        windowState.SZSEditorState.Open = !windowState.SZSEditorState.Open;
                     }
                     if (ImGui.MenuItem(windowState.AboutWindowOpen ? "About " + IconFonts.FontAwesome6.Check : "About " ))
                     {
