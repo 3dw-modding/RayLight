@@ -55,7 +55,7 @@ namespace RayLight
 
             switch (type.ToLower())
             {
-                case (".msbt"):
+                case (".msbt real"):
                     windowState.MSBTEditorState.loadedMSBTs.Add(new MSBTFile(data,OriginArchive,name));
                     break;
             }

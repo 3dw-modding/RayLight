@@ -35,6 +35,7 @@ namespace RayLight.NintendoFormats
             this.Reload();
         }
 
+
         public void Save()
         {
             var sarc = new Sarc();
@@ -77,7 +78,7 @@ namespace RayLight.NintendoFormats
             foreach (var entry in sarc)
             {
                 string name = entry.Key;      // filename inside the SARC
-                byte[] data = entry.Value.Array;    // file contents
+                byte[] data = sarc[entry.Key].ToArray();     // file contents
 
                 files.Add(new LoadedFile(name, data));
             }
