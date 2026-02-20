@@ -51,11 +51,11 @@ namespace RayLight
 
         public static void HandleFile(string type, byte[] data, string name, SZSArchive OriginArchive, WindowState windowState)
         {
-            Console.WriteLine($"loading {name}");
+            Console.WriteLine($"loading {name}{type}");
 
             switch (type.ToLower())
             {
-                case (".msbt real"):
+                case (".msbt"):
                     windowState.MSBTEditorState.loadedMSBTs.Add(new MSBTFile(data,OriginArchive,name));
                     break;
             }

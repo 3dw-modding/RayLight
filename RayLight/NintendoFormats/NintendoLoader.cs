@@ -115,6 +115,28 @@ namespace RayLight.NintendoFormats
             msbt = new(MsbtData);
         }
 
+        public string GetName()
+        {
+            if (OriginFileName != null) return OriginFileName;
+            else if (FilePath != null) return Path.GetFileNameWithoutExtension(FilePath);
+            return "";
+        }
+
+        public void Reload()
+        {
+            if (OriginArchive != null)
+            {
+                for (int i = 0; i < OriginArchive.files.Count; i++)
+                {
+                    if (OriginArchive.files[i].Name == OriginFileName)
+                    {
+                        msbt = new(OriginArchive.files[i].Data);
+                        break;
+                    }
+                }
+            }
+        }
+
         public void Save()
         {
             if (OriginArchive != null && OriginFileName != null)
