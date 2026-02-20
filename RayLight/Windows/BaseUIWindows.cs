@@ -44,6 +44,10 @@ namespace RayLight
                     {
                         windowState.SZSEditorState.Open = !windowState.SZSEditorState.Open;
                     }
+                    if (ImGui.MenuItem(windowState.SZSEditorState.Open ? "MSBT Editor " + IconFonts.FontAwesome6.Check : "MSBT Editor "))
+                    {
+                        windowState.MSBTEditorState.Open = !windowState.MSBTEditorState.Open;
+                    }
                     if (ImGui.MenuItem(windowState.AboutWindowOpen ? "About " + IconFonts.FontAwesome6.Check : "About " ))
                     {
                         windowState.AboutWindowOpen = !windowState.AboutWindowOpen;
