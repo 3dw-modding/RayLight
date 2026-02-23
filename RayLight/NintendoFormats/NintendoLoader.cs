@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime;
-using CsYaz0;
+using Binary_Stream;
 using Nintendo.Bfres;
 using SarcLibrary;
 using MsbtLib;

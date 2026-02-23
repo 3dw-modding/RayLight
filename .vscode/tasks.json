@@ -26,6 +26,20 @@
                 
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "build (ARM64)",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/RayLight.sln",
+                "/p:Platform=Any CPU",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+                
+            ],
+            "problemMatcher": "$msCompile"
         }
     ]
 }
