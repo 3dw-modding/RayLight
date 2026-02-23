@@ -4,6 +4,16 @@ using RayLight;
 using RayLight.Windows;
 using rlImGui_cs;
 
+Console.WriteLine(
+    System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString()
+);
+
+if (System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == System.Runtime.InteropServices.Architecture.Arm64)
+{
+    Console.WriteLine("WARNING, THIS IS RUNNING AS ARM");
+    Console.WriteLine("ARM IS UNTESTED ON WINDOWS AND BROKEN UNDER MACOS");
+}
+
 Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint | ConfigFlags.VSyncHint | ConfigFlags.ResizableWindow);
 Raylib.InitWindow(1280, 800, "RayLight");
 
