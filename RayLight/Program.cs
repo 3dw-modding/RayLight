@@ -17,21 +17,30 @@ if (System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == Sys
 Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint | ConfigFlags.VSyncHint | ConfigFlags.ResizableWindow);
 Raylib.InitWindow(1280, 800, "RayLight");
 
-Raylib.SetTargetFPS(144);
+int displayRefreshRate = Raylib.GetMonitorRefreshRate(Raylib.GetCurrentMonitor());
+Raylib.SetTargetFPS(displayRefreshRate);
+Raylib.SetWindowTitle($"RayLight - {displayRefreshRate} FPS");
 
 rlImGui.Setup(true);
 
 BaseUIWindows baseUI = new BaseUIWindows();
 WindowState windowState = new WindowState();
 
+float FPS = 0;
+float SmoothedDeltaTime = 0;
+
 while (!Raylib.WindowShouldClose())
 {
+    SmoothedDeltaTime = SmoothedDeltaTime * 0.99f + Raylib.GetFrameTime() * 0.01f;
+    FPS = 1.0f / SmoothedDeltaTime;
 
     Raylib.BeginDrawing();
-    Raylib.ClearBackground(Color.DarkGray);
+    Raylib.ClearBackground(new Color(20,20,20));
 
     rlImGui.Begin();
     //ImGui.ShowDemoWindow();
+
+    Raylib.SetWindowTitle($"RayLight - {FPS:F2} FPS");
 
     
     baseUI.RenderMenuBar(windowState);

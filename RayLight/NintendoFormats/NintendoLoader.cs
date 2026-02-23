@@ -150,7 +150,8 @@ namespace RayLight.NintendoFormats
                         break;
                     }
                 }
-                OriginArchive.Save();
+                //Why was this saved here? Let the user pick when to save the archive, not force it on every file save.
+                //OriginArchive.Save(); 
             }
             else if (FilePath != null)
             {
