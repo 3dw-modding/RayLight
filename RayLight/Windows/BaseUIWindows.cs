@@ -78,11 +78,19 @@ namespace RayLight
                 ImGui.PopStyleVar();
 
                 string version = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-                ImGui.Text($"Version: {version}");
-                ImGui.TextWrapped($"An experemental level editor for Mario 3D World and Bowser's Fury");
+                string architecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture.ToString();
+                string platform = System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Windows) ? "Windows" :
+                                  System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.OSX) ? "MacOS" :
+                                  System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(System.Runtime.InteropServices.OSPlatform.Linux) ? "Linux" : "Unknown OS";
+                ImGui.Text($"Version: {version} ({platform} {architecture})\n");
+                ImGui.TextWrapped($"An experemental level editor for Mario 3D World and Bowser's Fury\n\n");
 
-                ImGui.End();
+                ImGui.TextWrapped("This is an early alpha build, expect crashes and bugs. If you want to contribute or found a bug, please report it on the GitHub page!");
+
+
+                
             }
+            ImGui.End();
         }
 
         public void RenderFileBrowser(WindowState windowState)

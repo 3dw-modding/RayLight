@@ -11,7 +11,7 @@ namespace RayLight
     internal class WindowState
     {
         //Open states
-        public bool AboutWindowOpen = false;
+        public bool AboutWindowOpen = true;
         public bool FileWindowOpen = true;
 
         //Editors
@@ -19,6 +19,11 @@ namespace RayLight
         public MsbtEditorState MSBTEditorState = new MsbtEditorState();
 
         public AampEditorState AampEditorState = new AampEditorState();
+
+
+        //Scene Rendering
+        public bool RenderScene = true;
+        public RayLight.SceneView.SceneManager SceneManager = new RayLight.SceneView.SceneManager();
 
 
     }

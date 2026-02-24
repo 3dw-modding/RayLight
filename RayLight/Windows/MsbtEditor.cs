@@ -133,8 +133,9 @@ namespace RayLight.Windows
 
                 ImGui.EndChild();
 
-                ImGui.End();
+                
             }
+            ImGui.End();
         }
     }
 }

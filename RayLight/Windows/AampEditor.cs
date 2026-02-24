@@ -148,7 +148,7 @@ namespace RayLight.Windows
                 }
 
                 // Calculate half width
-                float half = ImGui.GetContentRegionAvail().X * 0.3f;
+                float half = ImGui.GetContentRegionAvail().X * 0.2f;
 
                 // LEFT PANEL
                 ImGui.BeginChild("LeftPanel", new Vector2(half, 0));
@@ -277,8 +277,10 @@ namespace RayLight.Windows
 
                 ImGui.EndChild();
 
-                ImGui.End();
+                
             }
+            ImGui.End();
         }
+
     }
 }

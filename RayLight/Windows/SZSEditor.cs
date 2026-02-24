@@ -163,8 +163,9 @@ namespace RayLight.Windows
                 
 
 
-                ImGui.End();
+                
             }
+            ImGui.End();
 
             if (EditorState.ExportFile != null)
             {
@@ -238,8 +239,9 @@ namespace RayLight.Windows
                     editorState.ExportFileOrigin = null;
                 }
 
-                ImGui.End();
+                
             }
+            ImGui.End();
         }
 
         public static void RenderImportMenu(SZSEditorState editorState)
@@ -313,8 +315,9 @@ namespace RayLight.Windows
                     editorState.ImportTargetSZS = null;
                 }
 
-                ImGui.End();
+                
             }
+            ImGui.End();
         }
     }
 }

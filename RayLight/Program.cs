@@ -50,6 +50,8 @@ while (!Raylib.WindowShouldClose())
     if (windowState.MSBTEditorState.Open && windowState.MSBTEditorState.loadedMSBTs.Count() > 0) MsbtEditor.RenderEditor(windowState);
     if (windowState.AampEditorState.Open && windowState.AampEditorState.loadedAamps.Count() > 0) AampEditor.RenderEditor(windowState);
 
+    if (windowState.RenderScene) windowState.SceneManager.Update();
+
     rlImGui.End();
     Raylib.EndDrawing();
 }

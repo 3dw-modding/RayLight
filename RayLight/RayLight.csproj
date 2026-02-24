@@ -5,7 +5,12 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<Version>0.0.1</Version>
+  <!-- Romantic versioning. Romanitc, Majour, Minor
+  An overhall, or going from alpha to beta would be worth a romantic version bump,
+  Adding a new format support, or a major feature would be worth a major version bump,
+  Bug fixes, or minor features would be worth a minor version bump.
+   -->
+	<Version>0.1.0</Version>
 	<Platforms>X64;</Platforms>
 
   </PropertyGroup>
@@ -15,6 +20,7 @@
     <PackageReference Include="BfresLibrary" Version="1.0.1" />
     <PackageReference Include="MsbtLib" Version="0.10.2" />
     <PackageReference Include="NativeFileDialogSharp" Version="0.6.0-alpha" />
+    <PackageReference Include="OatmealDome.NinLib.Byaml" Version="1.1.0" />
     <PackageReference Include="rlImgui-cs" Version="3.2.0" />
     <PackageReference Include="SarcLibrary" Version="3.3.4" />
   </ItemGroup>
