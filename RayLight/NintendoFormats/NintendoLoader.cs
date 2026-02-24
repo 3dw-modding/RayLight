@@ -6,6 +6,7 @@ using Binary_Stream;
 using Nintendo.Bfres;
 using SarcLibrary;
 using MsbtLib;
+using Nintendo.Aamp;
 
 
 namespace RayLight.NintendoFormats
@@ -22,6 +23,83 @@ namespace RayLight.NintendoFormats
         }
 
     }
+    internal class AampContainer
+    {
+
+        public string FilePath = null;
+        public SZSArchive OriginArchive = null;
+        public string OriginFileName = null;
+        public Nintendo.Aamp.AampFile aamp;
+
+        public AampContainer(byte[] AampData, SZSArchive originArchive, string originFileName)
+        {
+            OriginArchive = originArchive;
+            OriginFileName = originFileName;
+
+            //Im going to try sanatise the bytes, cus for some reason you cant reopen them.
+            AampData = AampData.ToArray();
+            aamp = new(AampData);
+        }
+
+        public AampContainer(string path)
+        {
+            FilePath = path;
+            aamp = new(path);
+        }
+
+        public string GetName()
+        {
+            if (OriginFileName != null) return OriginFileName;
+            else if (FilePath != null) return Path.GetFileNameWithoutExtension(FilePath);
+            return "";
+        }
+
+        public void test()
+        {
+            //Console.WriteLine(aamp.ToJson());
+            string TestPath =  OriginArchive.FilePath + "_" + OriginFileName + ".yml";
+            File.WriteAllText(TestPath, aamp.ToYml());
+        }
+
+        public void Save()
+        {
+            if (OriginArchive != null && OriginFileName != null)
+            {
+                byte[] aampData = aamp.ToBinary();
+                for (int i = 0; i < OriginArchive.files.Count; i++)
+                {
+                    if (OriginArchive.files[i].Name == OriginFileName)
+                    {
+                        OriginArchive.files[i].Data = aampData;
+                        break;
+                    }
+                }
+                //Why was this saved here? Let the user pick when to save the archive, not force it on every file save.
+                //OriginArchive.Save(); 
+            }
+            else if (FilePath != null)
+            {
+                aamp.WriteBinary(FilePath);
+            }
+        }
+
+        public void Reload()
+        {
+            if (OriginArchive != null)
+            {
+                for (int i = 0; i < OriginArchive.files.Count; i++)
+                {
+                    if (OriginArchive.files[i].Name == OriginFileName)
+                    {
+                        byte[] AampData = OriginArchive.files[i].Data.ToArray();
+                        aamp = new(AampData);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     internal class SZSArchive
     {
         public String FilePath;

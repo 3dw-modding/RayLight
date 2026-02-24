@@ -18,6 +18,8 @@ namespace RayLight
         public SZSEditorState SZSEditorState = new SZSEditorState();
         public MsbtEditorState MSBTEditorState = new MsbtEditorState();
 
+        public AampEditorState AampEditorState = new AampEditorState();
+
 
     }
 }

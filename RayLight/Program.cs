@@ -10,8 +10,7 @@ Console.WriteLine(
 
 if (System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture == System.Runtime.InteropServices.Architecture.Arm64)
 {
-    Console.WriteLine("WARNING, THIS IS RUNNING AS ARM");
-    Console.WriteLine("ARM IS UNTESTED ON WINDOWS AND BROKEN UNDER MACOS");
+    Console.WriteLine("ARM64 is only supported on MacOS, expect bugs and crashes on other platforms.");
 }
 
 Raylib.SetConfigFlags(ConfigFlags.Msaa4xHint | ConfigFlags.VSyncHint | ConfigFlags.ResizableWindow);
@@ -49,6 +48,7 @@ while (!Raylib.WindowShouldClose())
 
     if (windowState.SZSEditorState.Open && windowState.SZSEditorState.loadedSZS.Count() > 0) SZSEditor.RenderEditor(windowState);
     if (windowState.MSBTEditorState.Open && windowState.MSBTEditorState.loadedMSBTs.Count() > 0) MsbtEditor.RenderEditor(windowState);
+    if (windowState.AampEditorState.Open && windowState.AampEditorState.loadedAamps.Count() > 0) AampEditor.RenderEditor(windowState);
 
     rlImGui.End();
     Raylib.EndDrawing();

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,12 @@ namespace RayLight
 
         public static bool isSupported(String format)
         {
-            return supportedFormats.Contains(format.ToLower());
+            if (supportedFormats.Contains(format.ToLower()))
+                return true;
+            if (format.ToLower().StartsWith(".bagl"))
+                return true;
+
+            return false;
         }
 
         public static void HandleFile(String path, WindowState windowState)
@@ -57,6 +63,17 @@ namespace RayLight
             {
                 case (".msbt"):
                     windowState.MSBTEditorState.loadedMSBTs.Add(new MSBTFile(data,OriginArchive,name));
+                    break;
+
+                default:
+                    //At minimum, in 3D world, its safe to assume a file beginning with "bagl" is an AAMP.
+                    if (type.ToLower().StartsWith(".bagl"))
+                    {
+                        AampContainer newAamp = new AampContainer(data, OriginArchive, name);
+                        windowState.AampEditorState.loadedAamps.Add(newAamp);
+                        //newAamp.test();
+                    }
+                    else Console.WriteLine($"Unknown filetype {type} for file {name}");
                     break;
             }
         }

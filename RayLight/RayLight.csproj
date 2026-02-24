@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AampLibrary" Version="1.0.10" />
     <PackageReference Include="BfresLibrary" Version="1.0.1" />
     <PackageReference Include="MsbtLib" Version="0.10.2" />
     <PackageReference Include="NativeFileDialogSharp" Version="0.6.0-alpha" />
@@ -20,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\binary_stream\BinaryStream\BinaryStream.csproj" />
+    <None Include="Assets\**" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>

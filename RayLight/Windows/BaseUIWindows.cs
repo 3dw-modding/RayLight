@@ -48,6 +48,10 @@ namespace RayLight
                     {
                         windowState.MSBTEditorState.Open = !windowState.MSBTEditorState.Open;
                     }
+                    if (ImGui.MenuItem(windowState.AampEditorState.Open ? "AAMP Editor " + IconFonts.FontAwesome6.Check : "AAMP Editor "))
+                    {
+                        windowState.AampEditorState.Open = !windowState.AampEditorState.Open;
+                    }
                     if (ImGui.MenuItem(windowState.AboutWindowOpen ? "About " + IconFonts.FontAwesome6.Check : "About " ))
                     {
                         windowState.AboutWindowOpen = !windowState.AboutWindowOpen;
