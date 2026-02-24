@@ -26,6 +26,11 @@ namespace RayLight.Windows
         //Import
         public SZSArchive ImportTargetSZS;
         public string ImportFilePath;
+
+        //Save As
+        public SZSArchive SaveAsTargetSZS;
+        public string SaveAsDirectory;
+        public string SaveAsFilename;
     }
 
     internal class SZSEditor
@@ -48,6 +53,15 @@ namespace RayLight.Windows
                     if (ImGui.BeginMenu("File"))
                     {
                         if (ImGui.MenuItem("Save"))
+                        {
+                            SelectedSZS.Save();
+                        }
+                        if (ImGui.MenuItem("Save As"))
+                        {
+                            EditorState.SaveAsTargetSZS = SelectedSZS;
+                            EditorState.SaveAsDirectory = Path.GetDirectoryName(SelectedSZS.FilePath);
+                            EditorState.SaveAsFilename = Path.GetFileName(SelectedSZS.FilePath);
+                        }
                         {
                             SelectedSZS.Save();
                         }
@@ -175,6 +189,10 @@ namespace RayLight.Windows
             {
                 RenderImportMenu(EditorState);
             }
+            if (EditorState.SaveAsTargetSZS != null)
+            {
+                RenderSaveMenu(EditorState);
+            }
         }
 
         public static void RenderExportMenu(SZSEditorState editorState)
@@ -237,6 +255,73 @@ namespace RayLight.Windows
                 {
                     editorState.ExportFile = null;
                     editorState.ExportFileOrigin = null;
+                }
+
+                
+            }
+            ImGui.End();
+        }
+
+        public static void RenderSaveMenu(SZSEditorState editorState)
+        {
+            SZSArchive SelectedSZS = editorState.loadedSZS[editorState.SZSViwerTab];
+            if (SelectedSZS != editorState.SaveAsTargetSZS)
+            {
+                //Don't let the user export a file they have deleted.
+                //Or if they have changed tab to a different SZS
+                editorState.SaveAsTargetSZS = null;
+                return;
+            }
+
+            string ExportFilename = editorState.SaveAsFilename;
+            SZSArchive file = editorState.SaveAsTargetSZS; //For shorthand.
+            if (ImGui.Begin($"Save As ##{ExportFilename}",ImGuiWindowFlags.AlwaysAutoResize))
+            {
+                ImGui.TextUnformatted($"File: {ExportFilename} from {Path.GetFileNameWithoutExtension(SelectedSZS.FilePath)}");
+
+                ImGui.TextUnformatted("File Path:");
+                ImGui.SameLine();
+                ImGui.InputText($"##Export_{ExportFilename} path entry", ref editorState.SaveAsDirectory, 260);
+                ImGui.TextUnformatted("File Name:");
+                ImGui.SameLine();
+                ImGui.InputText($"##Export_{ExportFilename} name entry", ref editorState.SaveAsFilename, 60);
+
+                string ExportInvalidReason = null;
+
+                if (!Directory.Exists(editorState.SaveAsDirectory)) ExportInvalidReason = "Export Directory not valid.";
+                else
+                {
+                    if (File.Exists(Path.Combine(editorState.SaveAsDirectory,ExportFilename)))
+                    {
+                        ExportInvalidReason = "Save Path allready has a file with that name.";
+                    }
+                }
+
+                if (ExportInvalidReason != null) StyleData.ColourButtonRed();
+                else StyleData.ColourButtonGreen();
+
+                if (ImGui.Button($"Export ##Button {ExportFilename}"))
+                {
+                    if (ExportInvalidReason == null)
+                    {
+                        editorState.SaveAsTargetSZS.FilePath = Path.Combine(editorState.SaveAsDirectory, ExportFilename);
+                        editorState.SaveAsTargetSZS.Save();
+                    }
+                }
+                if (ExportInvalidReason != null)
+                {
+                    if (ImGui.BeginItemTooltip())
+                    {
+                        ImGui.Text(ExportInvalidReason);
+                        ImGui.EndTooltip();
+                    }
+                }
+                ImGui.PopStyleColor(3);
+
+                ImGui.SameLine();
+                if (ImGui.Button($"Cancel ##Button {ExportFilename}"))
+                {
+                    editorState.SaveAsTargetSZS = null;
                 }
 
                 
