@@ -17,8 +17,8 @@ namespace RayLight
         //Editors
         public SZSEditorState SZSEditorState = new SZSEditorState();
         public MsbtEditorState MSBTEditorState = new MsbtEditorState();
-
         public AampEditorState AampEditorState = new AampEditorState();
+        public ByamlEditorState BymlEditorState = new ByamlEditorState();
 
 
         //Scene Rendering

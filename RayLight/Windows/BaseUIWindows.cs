@@ -52,6 +52,10 @@ namespace RayLight
                     {
                         windowState.AampEditorState.Open = !windowState.AampEditorState.Open;
                     }
+                    if (ImGui.MenuItem(windowState.BymlEditorState.Open ? "BYAML Editor " + IconFonts.FontAwesome6.Check : "BYAML Editor "))
+                    {
+                        windowState.BymlEditorState.Open = !windowState.BymlEditorState.Open;
+                    }
                     if (ImGui.MenuItem(windowState.AboutWindowOpen ? "About " + IconFonts.FontAwesome6.Check : "About " ))
                     {
                         windowState.AboutWindowOpen = !windowState.AboutWindowOpen;

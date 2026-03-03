@@ -49,6 +49,7 @@ while (!Raylib.WindowShouldClose())
     if (windowState.SZSEditorState.Open && windowState.SZSEditorState.loadedSZS.Count() > 0) SZSEditor.RenderEditor(windowState);
     if (windowState.MSBTEditorState.Open && windowState.MSBTEditorState.loadedMSBTs.Count() > 0) MsbtEditor.RenderEditor(windowState);
     if (windowState.AampEditorState.Open && windowState.AampEditorState.loadedAamps.Count() > 0) AampEditor.RenderEditor(windowState);
+    if (windowState.BymlEditorState.Open && windowState.BymlEditorState.loadedByaml.Count() > 0) ByamlEditor.RenderEditor(windowState);
 
     if (windowState.RenderScene) windowState.SceneManager.Update();
 

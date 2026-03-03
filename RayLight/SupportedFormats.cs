@@ -67,8 +67,8 @@ namespace RayLight
                 case (".byml"):
                 case (".byaml"):
                     ByamlContainer newByaml = new ByamlContainer(data, OriginArchive, name);
-                    //windowState.BymlEditorState.loadedBymls.Add(newByaml);
-                    newByaml.test();
+                    windowState.BymlEditorState.loadedByaml.Add(newByaml);
+                    //newByaml.test();
                     break;
 
                 default:

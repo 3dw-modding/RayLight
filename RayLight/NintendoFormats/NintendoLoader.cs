@@ -8,6 +8,7 @@ using SarcLibrary;
 using MsbtLib;
 using Nintendo.Aamp;
 using BymlLibrary;
+using OatmealDome.BinaryData.Extensions;
 
 
 namespace RayLight.NintendoFormats
@@ -45,28 +46,6 @@ namespace RayLight.NintendoFormats
             Load(ByamlData);
         }
 
-        //HACK! Treats V1 as V2.
-        private byte[] VersionHack(byte[] ByamlData, int version, bool bigEndian)
-        {
-            if (version == 1)
-            {
-                byte HackVersion = 0x3;
-                //Change version, since V3 parser parses V1 files just fine.
-                if (bigEndian)
-                {
-                    ByamlData[2] = 0;
-                    ByamlData[3] = HackVersion;
-                }
-                else
-                {
-                    ByamlData[2] = HackVersion;
-                    ByamlData[3] = 0;
-                }
-            }
-            
-            return ByamlData;
-        }
-
         private ushort GetVersion(byte[] ByamlData, bool bigEndian)
         {
             return bigEndian ? (ushort)((ByamlData[2] << 8) | ByamlData[3]) : (ushort)(ByamlData[2] | (ByamlData[3] << 8));
@@ -85,6 +64,36 @@ namespace RayLight.NintendoFormats
             else throw new InvalidDataException("Not a valid BYML header.");
         }
 
+        private byte[] ConvertToV2(byte[] ByamlData)
+        {
+            Stream Stream = new MemoryStream(ByamlData);
+            object V1Byaml = OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Load(Stream);
+
+            OatmealDome.NinLib.Byaml.ByamlSerializerSettings byamlSerializerSettings = new OatmealDome.NinLib.Byaml.ByamlSerializerSettings();
+            byamlSerializerSettings.ByteOrder = endianness == Revrs.Endianness.Big ? OatmealDome.BinaryData.ByteOrder.BigEndian : OatmealDome.BinaryData.ByteOrder.LittleEndian;
+            byamlSerializerSettings.Version = OatmealDome.NinLib.Byaml.ByamlVersion.Two;
+
+            Stream = new MemoryStream();
+            OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Save(Stream, V1Byaml, byamlSerializerSettings);
+
+            return Stream.ReadBytes((int)Stream.Length);
+        }
+
+        private byte[] ConvertToV1(byte[] ByamlData)
+        {
+            Stream Stream = new MemoryStream(ByamlData);
+            object V2Byaml = OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Load(Stream);
+
+            OatmealDome.NinLib.Byaml.ByamlSerializerSettings byamlSerializerSettings = new OatmealDome.NinLib.Byaml.ByamlSerializerSettings();
+            byamlSerializerSettings.ByteOrder = endianness == Revrs.Endianness.Big ? OatmealDome.BinaryData.ByteOrder.BigEndian : OatmealDome.BinaryData.ByteOrder.LittleEndian;
+            byamlSerializerSettings.Version = OatmealDome.NinLib.Byaml.ByamlVersion.One;
+
+            Stream = new MemoryStream();
+            OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Save(Stream, V2Byaml, byamlSerializerSettings);
+
+            return Stream.ReadBytes((int)Stream.Length);
+        }
+
         public void test()
         {
             Console.WriteLine(byml.ToYaml());
@@ -96,8 +105,20 @@ namespace RayLight.NintendoFormats
         {
             endianness = IsBigEndian(ByamlData) ? Revrs.Endianness.Big : Revrs.Endianness.Little;
             version = GetVersion(ByamlData, endianness == Revrs.Endianness.Big);
-            ByamlData = VersionHack(ByamlData, version, endianness == Revrs.Endianness.Big);
-            byml = Byml.FromBinary(ByamlData);
+            if (version != 1)
+            {
+                byml = Byml.FromBinary(ByamlData);
+                return;
+            }
+            //Convert to V2 to load it, since the fast loader can't load V1.
+            //This is segnificantly slower, but BymlLibrary doesn't support V1. 
+            //So we need to convert it to V2 to load it, then we can convert it back to V1 when saving.
+            else
+            {
+                byml = Byml.FromBinary(ConvertToV2(ByamlData));    
+            }
+            
+            
         }
 
         public void Reload()
@@ -121,11 +142,12 @@ namespace RayLight.NintendoFormats
             if (OriginArchive != null && OriginFileName != null)
             {
                 using MemoryStream ms = new();
-                if (version == 1) byml.WriteBinary(ms, endianness, 2); //HACK! Treats V1 as V2 since 3DW can read it. THIS BREAKS V1 ONLY GAMES!
+                if (version == 1) byml.WriteBinary(ms, endianness, 2); //Write as V2 for now.
                 else byml.WriteBinary(ms, endianness, version);
                 
                 
                 byte[] ByamlData = ms.ToArray();
+                if (version == 1) ByamlData = ConvertToV1(ByamlData); //Convert back to V1 if it was originally V1.
 
                 for (int i = 0; i < OriginArchive.files.Count; i++)
                 {
