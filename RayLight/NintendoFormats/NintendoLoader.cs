@@ -7,6 +7,7 @@ using Nintendo.Bfres;
 using SarcLibrary;
 using MsbtLib;
 using Nintendo.Aamp;
+using BymlLibrary;
 
 
 namespace RayLight.NintendoFormats
@@ -22,6 +23,120 @@ namespace RayLight.NintendoFormats
             Data = data;
         }
 
+    }
+
+    internal class ByamlContainer
+    {
+        public Byml byml;
+        public SZSArchive OriginArchive = null;
+        public string OriginFileName = null;
+
+        Revrs.Endianness endianness;
+        ushort version;
+
+        public ByamlContainer(byte[] ByamlData, SZSArchive originArchive, string originFileName)
+        {
+            OriginArchive = originArchive;
+            OriginFileName = originFileName;
+
+            //Im going to try sanatise the bytes, cus for some reason you cant reopen them.
+            ByamlData = ByamlData.ToArray();
+
+            Load(ByamlData);
+        }
+
+        //HACK! Treats V1 as V2.
+        private byte[] VersionHack(byte[] ByamlData, int version, bool bigEndian)
+        {
+            if (version == 1)
+            {
+                byte HackVersion = 0x3;
+                //Change version, since V3 parser parses V1 files just fine.
+                if (bigEndian)
+                {
+                    ByamlData[2] = 0;
+                    ByamlData[3] = HackVersion;
+                }
+                else
+                {
+                    ByamlData[2] = HackVersion;
+                    ByamlData[3] = 0;
+                }
+            }
+            
+            return ByamlData;
+        }
+
+        private ushort GetVersion(byte[] ByamlData, bool bigEndian)
+        {
+            return bigEndian ? (ushort)((ByamlData[2] << 8) | ByamlData[3]) : (ushort)(ByamlData[2] | (ByamlData[3] << 8));
+        }
+
+        private bool IsBigEndian(byte[] ByamlData)
+        {
+            if (ByamlData[0] == (byte)'Y' && ByamlData[1] == (byte)'B')
+            {
+                return false; // "YB" → little-endian
+            }
+            else if (ByamlData[0] == (byte)'B' && ByamlData[1] == (byte)'Y')
+            {
+                return true; // "BY" → big-endian
+            }
+            else throw new InvalidDataException("Not a valid BYML header.");
+        }
+
+        public void test()
+        {
+            Console.WriteLine(byml.ToYaml());
+            //string TestPath = OriginArchive.FilePath + "_" + OriginFileName + ".yml";
+            //File.WriteAllText(TestPath, byml.ToYaml());
+        }
+
+        public void Load(Byte[] ByamlData)
+        {
+            endianness = IsBigEndian(ByamlData) ? Revrs.Endianness.Big : Revrs.Endianness.Little;
+            version = GetVersion(ByamlData, endianness == Revrs.Endianness.Big);
+            ByamlData = VersionHack(ByamlData, version, endianness == Revrs.Endianness.Big);
+            byml = Byml.FromBinary(ByamlData);
+        }
+
+        public void Reload()
+        {
+            if (OriginArchive != null)
+            {
+                for (int i = 0; i < OriginArchive.files.Count; i++)
+                {
+                    if (OriginArchive.files[i].Name == OriginFileName)
+                    {
+                        byte[] ByamlData = OriginArchive.files[i].Data.ToArray();
+                        Load(ByamlData);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void Save()
+        {
+            if (OriginArchive != null && OriginFileName != null)
+            {
+                using MemoryStream ms = new();
+                if (version == 1) byml.WriteBinary(ms, endianness, 2); //HACK! Treats V1 as V2 since 3DW can read it. THIS BREAKS V1 ONLY GAMES!
+                else byml.WriteBinary(ms, endianness, version);
+                
+                
+                byte[] ByamlData = ms.ToArray();
+
+                for (int i = 0; i < OriginArchive.files.Count; i++)
+                {
+                    if (OriginArchive.files[i].Name == OriginFileName)
+                    {
+                        OriginArchive.files[i].Data = ByamlData;
+                        break;
+                    }
+                }
+            }
+    }
     }
     internal class AampContainer
     {
@@ -74,8 +189,6 @@ namespace RayLight.NintendoFormats
                         break;
                     }
                 }
-                //Why was this saved here? Let the user pick when to save the archive, not force it on every file save.
-                //OriginArchive.Save(); 
             }
             else if (FilePath != null)
             {
@@ -228,8 +341,6 @@ namespace RayLight.NintendoFormats
                         break;
                     }
                 }
-                //Why was this saved here? Let the user pick when to save the archive, not force it on every file save.
-                //OriginArchive.Save(); 
             }
             else if (FilePath != null)
             {

@@ -11,7 +11,7 @@ namespace RayLight
 {
     internal class SupportedFormats
     {
-        static String[] supportedFormats = new String[] { ".szs", ".msbt" };
+        static String[] supportedFormats = new String[] { ".szs", ".msbt", ".byml", ".byaml" };
 
         public static bool isSupported(String format)
         {
@@ -63,6 +63,12 @@ namespace RayLight
             {
                 case (".msbt"):
                     windowState.MSBTEditorState.loadedMSBTs.Add(new MSBTFile(data,OriginArchive,name));
+                    break;
+                case (".byml"):
+                case (".byaml"):
+                    ByamlContainer newByaml = new ByamlContainer(data, OriginArchive, name);
+                    //windowState.BymlEditorState.loadedBymls.Add(newByaml);
+                    newByaml.test();
                     break;
 
                 default:
