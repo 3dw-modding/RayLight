@@ -67,6 +67,7 @@ namespace RayLight.NintendoFormats
         private byte[] ConvertToV2(byte[] ByamlData)
         {
             Stream Stream = new MemoryStream(ByamlData);
+            Stream.Seek(0, SeekOrigin.Begin);
             object V1Byaml = OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Load(Stream);
 
             OatmealDome.NinLib.Byaml.ByamlSerializerSettings byamlSerializerSettings = new OatmealDome.NinLib.Byaml.ByamlSerializerSettings();
@@ -89,9 +90,24 @@ namespace RayLight.NintendoFormats
             byamlSerializerSettings.Version = OatmealDome.NinLib.Byaml.ByamlVersion.One;
 
             Stream = new MemoryStream();
+            Stream.Seek(0, SeekOrigin.Begin);
             OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Save(Stream, V2Byaml, byamlSerializerSettings);
-
+            Stream.Seek(0, SeekOrigin.Begin);
             return Stream.ReadBytes((int)Stream.Length);
+        }
+
+        private byte[] VersionHack(byte[] ByamlData)
+        {
+            byte Target = 0x3;
+            if(endianness == Revrs.Endianness.Big)
+            {
+                ByamlData[3] = Target;
+            }
+            else
+            {
+                ByamlData[2] = Target;
+            }
+            return ByamlData;
         }
 
         public void test()
@@ -100,6 +116,8 @@ namespace RayLight.NintendoFormats
             //string TestPath = OriginArchive.FilePath + "_" + OriginFileName + ".yml";
             //File.WriteAllText(TestPath, byml.ToYaml());
         }
+
+        
 
         public void Load(Byte[] ByamlData)
         {
@@ -115,7 +133,17 @@ namespace RayLight.NintendoFormats
             //So we need to convert it to V2 to load it, then we can convert it back to V1 when saving.
             else
             {
-                byml = Byml.FromBinary(ConvertToV2(ByamlData));    
+                bool useHack = true;
+                if (useHack)
+                {
+                    byte[] hackedData = VersionHack(ByamlData);
+                    byml = Byml.FromBinary(hackedData);
+                }
+                else
+                {
+                    byte[] V2Data = ConvertToV2(ByamlData);
+                    byml = Byml.FromBinary(V2Data);    
+                }
             }
             
             
