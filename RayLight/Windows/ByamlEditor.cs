@@ -1,15 +1,16 @@
-using System.Numerics;
-using ImGuiNET;
-using Raylib_cs;
-using rlImGui_cs;
-using NativeFileDialogSharp;
-using System.Reflection;
-using RayLight.NintendoFormats;
-using System.Xml.Linq;
-using System.Runtime;
-using BymlLibrary.Nodes.Containers;
 using BymlLibrary;
+using BymlLibrary.Nodes.Containers;
 using CommunityToolkit.HighPerformance.Helpers;
+using ImGuiNET;
+using NativeFileDialogSharp;
+using Raylib_cs;
+using RayLight.NintendoFormats;
+using rlImGui_cs;
+using SharpYaml.Model;
+using System.Numerics;
+using System.Reflection;
+using System.Runtime;
+using System.Xml.Linq;
 
 namespace RayLight.Windows
 {
@@ -63,10 +64,17 @@ namespace RayLight.Windows
 
 
                     //Render TreeView of Byaml
-                    foreach (var entry in SelectedByaml.byml.GetMap())
+                    BymlMap map = SelectedByaml.byml.GetMap();
+                    Dictionary<string, Byml> replacements = new();
+                    foreach (var entry in map)
                     {
-                        RenderNode(new string[] { "" }, entry.Key, entry.Value);
+                        replacements[entry.Key] = RenderNode(new string[] { "" }, entry.Key, entry.Value);
                     }
+                    foreach (var replacement in replacements)
+                    {
+                        map[replacement.Key] = replacement.Value;
+                    }
+                    SelectedByaml.byml = new Byml(map);
                 }
             }
             ImGui.End();
@@ -78,9 +86,10 @@ namespace RayLight.Windows
         /// </summary>
         /// <param name="path">Current Route Taken (For Flagging)</param>
         /// <param name="node"></param>
-        private static void RenderNode(string[] path, string Name, Byml node)
+        private static Byml RenderNode(string[] path, string Name, Byml node)
         {
             string nodePath = string.Join("/", path);
+            Byml Outnode = node;
             switch (node.Type)
             {
 
@@ -89,6 +98,8 @@ namespace RayLight.Windows
                     ImGui.SameLine();
                     string StrValue = (string)node.GetString();
                     ImGui.InputText($"##{nodePath}/{Name}", ref StrValue, 1024);
+                    Outnode = new Byml(StrValue);
+
                     
                     break;
                 case BymlNodeType.Int:
@@ -96,6 +107,7 @@ namespace RayLight.Windows
                     ImGui.SameLine();
                     int IntValue = (int)node.GetInt();
                     ImGui.InputInt($"##{nodePath}/{Name}", ref IntValue);
+                    Outnode = new Byml(IntValue);
                     break;
                 
                 case BymlNodeType.Float:
@@ -103,6 +115,7 @@ namespace RayLight.Windows
                     ImGui.SameLine();
                     float FloatValue = (float)node.GetFloat();
                     ImGui.InputFloat($"##{nodePath}/{Name}", ref FloatValue);
+                    Outnode = new Byml(FloatValue);
                     break;
 
                 case BymlNodeType.Bool:
@@ -110,49 +123,51 @@ namespace RayLight.Windows
                     ImGui.SameLine();
                     bool BoolValue = (bool)node.GetBool();
                     ImGui.Checkbox($"##{nodePath}/{Name}", ref BoolValue);
+                    Outnode = new Byml(BoolValue);
                     break;
 
                 case BymlLibrary.BymlNodeType.Array:
                     if (ImGui.TreeNode($"{Name} ##{nodePath}"))
                     {
                         BymlArray array = (BymlArray)node.Value;
-                        int i = 0;
-                        foreach (Byml entry in array)
+                        for (int i = 0; i < array.Count(); i++)
                         {
-                            RenderNode(path.Append(Name).ToArray(), $"[{i++}]", entry);
+                            array[i] = RenderNode(path.Append(Name).ToArray(), $"[{i}]", array[i]);
                         }
                         ImGui.TreePop();
+                        Outnode = new Byml(array);
                     }
+                    
                     break;
                 case BymlLibrary.BymlNodeType.Map:
                     if (ImGui.TreeNode($"{Name} ##{nodePath}"))                    
                     {
                         BymlMap map = (BymlMap)node.Value;
-                        foreach (var entry in map)                        
+                        Dictionary<string, Byml> replacements = new();
+                        foreach (var entry in map)
                         {
-                            RenderNode(path.Append(Name).ToArray(), entry.Key, entry.Value);
+                            replacements[entry.Key] = RenderNode(path.Append(Name).ToArray(), entry.Key, entry.Value);
+                        }
+                        foreach (var replacement in replacements)
+                        {
+                            map[replacement.Key] = replacement.Value;
                         }
                         ImGui.TreePop();
+                        Outnode = new Byml(map);
                     }
                     break;
                     
                 default:
                     ImGui.Text($"{Name}: {node.Type.ToString()}");
                     break;
-                
 
+                 
 
                         
                         
              
             }
-           /*
-            if(ImGui.TreeNode($"{Name} ##{nodePath}"))
-            {
-                ImGui.TreePop();
-            }
-                
-            */
+            return Outnode;
         }
             
     }

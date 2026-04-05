@@ -66,18 +66,17 @@ namespace RayLight.NintendoFormats
 
         private byte[] ConvertToV2(byte[] ByamlData)
         {
-            Stream Stream = new MemoryStream(ByamlData);
-            Stream.Seek(0, SeekOrigin.Begin);
-            object V1Byaml = OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Load(Stream);
+            using MemoryStream inputStream = new MemoryStream(ByamlData);
+            object V1Byaml = OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Load(inputStream);
 
             OatmealDome.NinLib.Byaml.ByamlSerializerSettings byamlSerializerSettings = new OatmealDome.NinLib.Byaml.ByamlSerializerSettings();
             byamlSerializerSettings.ByteOrder = endianness == Revrs.Endianness.Big ? OatmealDome.BinaryData.ByteOrder.BigEndian : OatmealDome.BinaryData.ByteOrder.LittleEndian;
             byamlSerializerSettings.Version = OatmealDome.NinLib.Byaml.ByamlVersion.Two;
 
-            Stream = new MemoryStream();
-            OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Save(Stream, V1Byaml, byamlSerializerSettings);
+            using MemoryStream outputStream = new MemoryStream();
+            OatmealDome.NinLib.Byaml.Dynamic.ByamlFile.Save(outputStream, V1Byaml, byamlSerializerSettings);
 
-            return Stream.ReadBytes((int)Stream.Length);
+            return outputStream.ToArray();  // or outputStream.GetBuffer() if ToArray doesn't work
         }
 
         private byte[] ConvertToV1(byte[] ByamlData)
@@ -175,7 +174,7 @@ namespace RayLight.NintendoFormats
                 
                 
                 byte[] ByamlData = ms.ToArray();
-                if (version == 1) ByamlData = ConvertToV1(ByamlData); //Convert back to V1 if it was originally V1.
+                //if (version == 1) ByamlData = ConvertToV1(ByamlData); //Convert back to V1 if it was originally V1.
 
                 for (int i = 0; i < OriginArchive.files.Count; i++)
                 {
@@ -288,7 +287,7 @@ namespace RayLight.NintendoFormats
 
             //Write SARC to memory
             using MemoryStream ms = new();
-            sarc.Write(ms, endian);
+            sarc.Write(ms, endian, legacy:true);
 
             //Clean up sarc
             sarc = null;

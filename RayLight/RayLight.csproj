@@ -11,7 +11,7 @@
   Bug fixes, or minor features would be worth a minor version bump.
    -->
 	<Version>0.1.0</Version>
-	<Platforms>X64;</Platforms>
+	<Platforms>AnyCPU</Platforms>
 
   </PropertyGroup>
 
