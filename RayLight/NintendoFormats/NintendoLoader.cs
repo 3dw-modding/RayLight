@@ -35,6 +35,11 @@ namespace RayLight.NintendoFormats
         Revrs.Endianness endianness;
         ushort version;
 
+        public string GetName()
+        {
+            return OriginFileName;
+        }
+
         public ByamlContainer(byte[] ByamlData, SZSArchive originArchive, string originFileName)
         {
             OriginArchive = originArchive;
