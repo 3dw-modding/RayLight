@@ -4,9 +4,37 @@ using Raylib_cs;
 
 namespace RayLight.SceneView
 {
+
+    internal class SceneObject
+    {
+        public Raylib_cs.Model Renderer;
+        public Vector3 position;
+        public SceneObject(Model model,Vector3 position, Vector3 rotation, Vector3 scale)
+        {
+            float deg2rad = float.Pi/180;
+            this.position = position;
+            Matrix4x4 rotationMatrix = Matrix4x4.CreateFromYawPitchRoll(rotation.Y*deg2rad, rotation.X*deg2rad, rotation.Z*deg2rad);
+            Matrix4x4 scaleMatrix = Matrix4x4.CreateScale(scale);
+            Renderer = model;
+            Renderer.Transform = rotationMatrix * scaleMatrix;
+        }
+    }
     internal class SceneManager
     {
         public Freecam Camera = new Freecam();
+
+        SceneObject[] Scene;
+
+        public SceneManager()
+        {
+            Mesh cubeMesh = Raylib.GenMeshCube(1.0f, 1.0f, 1.0f);
+            Raylib_cs.Model modelData = Raylib.LoadModelFromMesh(cubeMesh);
+            SceneObject obj = new SceneObject (modelData, new Vector3(0,0,0), new Vector3(0,45,0), new Vector3(2,1,1));
+            Scene = [obj];
+        }
+
+            
+        
 
         public void Update()
         {
@@ -18,13 +46,24 @@ namespace RayLight.SceneView
         {
             Raylib.BeginMode3D(Camera.Camera);
 
-            int GridSize = 10;
-            //Render grid
-            for (int i = -GridSize; i <= GridSize; i++)
+            bool DrawGrid = true;
+
+            if (DrawGrid)
             {
-                Raylib.DrawLine3D(new Vector3(i, 0, -GridSize), new Vector3(i, 0, GridSize), Color.Gray);
-                Raylib.DrawLine3D(new Vector3(-GridSize, 0, i), new Vector3(GridSize, 0, i), Color.Gray);
+                int GridSize = 10;
+                //Render grid
+                for (int i = -GridSize; i <= GridSize; i++)
+                {
+                    Raylib.DrawLine3D(new Vector3(i, 0, -GridSize), new Vector3(i, 0, GridSize), Color.Gray);
+                    Raylib.DrawLine3D(new Vector3(-GridSize, 0, i), new Vector3(GridSize, 0, i), Color.Gray);
+                }
             }
+
+            foreach (SceneObject obj in Scene)
+            {
+                Raylib.DrawModel(obj.Renderer, obj.position, 1.0f, Color.White);
+            }
+            
 
             Raylib.EndMode3D();
         }
