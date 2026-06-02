@@ -1,0 +1,9 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="arm64" />
+  </Configurations>
+  <Project Path="RayLight/RayLight.csproj" />
+  <Project Path="binary_stream\BinaryStream\BinaryStream.csproj" />
+</Solution>
