@@ -1,6 +1,7 @@
 using System.Numerics;
 using ImGuiNET;
 using Raylib_cs;
+using RayLight.Windows;
 
 namespace RayLight.SceneView
 {
@@ -23,7 +24,11 @@ namespace RayLight.SceneView
     {
         public Freecam Camera = new Freecam();
 
-        SceneObject[] Scene;
+        public bool LoaderWindow = true;
+        public string SceneLoaderType = "Generic";
+        public Dictionary<string, string> LoaderArgs = new Dictionary<string, string>{};
+
+        public SceneObject[] Scene;
 
         public SceneManager()
         {
@@ -31,6 +36,7 @@ namespace RayLight.SceneView
             Raylib_cs.Model modelData = Raylib.LoadModelFromMesh(cubeMesh);
             SceneObject obj = new SceneObject (modelData, new Vector3(0,0,0), new Vector3(0,45,0), new Vector3(2,1,1));
             Scene = [obj];
+            LoaderArgs = GenericLoader.default_args;
         }
 
             
