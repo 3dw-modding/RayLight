@@ -33,6 +33,7 @@ namespace RayLight.SceneView
         public SceneManager()
         {
             Mesh cubeMesh = Raylib.GenMeshCube(1.0f, 1.0f, 1.0f);
+            
             Raylib_cs.Model modelData = Raylib.LoadModelFromMesh(cubeMesh);
             SceneObject obj = new SceneObject (modelData, new Vector3(0,0,0), new Vector3(0,45,0), new Vector3(2,1,1));
             Scene = [obj];

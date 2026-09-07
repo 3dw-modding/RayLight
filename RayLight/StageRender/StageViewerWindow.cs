@@ -16,7 +16,8 @@ namespace RayLight.Windows
         private static Dictionary<string, GenericLoader> LoaderClasses = new Dictionary<string, GenericLoader>
         {
             {"Generic",new GenericLoader()},
-            {"Generic2",new GenericLoader()}
+            {"Generic2",new GenericLoader()},
+            {"Super Mario 3D World (Switch)", new SM3DWLoaderNX()}
         };
 
 
@@ -50,13 +51,16 @@ namespace RayLight.Windows
 
                 if (ImGui.Button("Render"))
                 {
-                    EditorState.Scene = loader.Render(EditorState.Scene);
+                    EditorState.Scene = loader.Render(EditorState.Scene, EditorState.LoaderArgs);
                 }
 
                 ImGui.End();
             }
         }
     }
+}
+namespace RayLight.SceneView
+{
 
     internal class GenericLoader
     {
@@ -68,7 +72,12 @@ namespace RayLight.Windows
 
         public virtual void OnSwitch(SceneManager EditorState)
         {
-            EditorState.LoaderArgs = default_args;
+            //Long winded way of doing EditorState.LoaderArgs = default_args
+            //In a way respects shaddowing.
+
+            var currentType = this.GetType(); 
+            var args = currentType.GetField("default_args");
+            EditorState.LoaderArgs = (Dictionary<string, string>)args.GetValue(null);;
         }
 
         public virtual void WindowContent(Dictionary<string,string> args)
@@ -78,7 +87,7 @@ namespace RayLight.Windows
             args["World"] = world;
         }
 
-        public unsafe virtual SceneObject[] Render(SceneObject[] scene)
+        public unsafe virtual SceneObject[] Render(SceneObject[] scene, Dictionary<string,string> args)
         {
             /* This code lives as a cautionary tale of what NOT to do.
             This will unload every texture, INCLUDING THE DEFAULT WHITE. */
